@@ -1,0 +1,21 @@
+# Check out https://docs.codemagic.io/yaml/building-a-react-native-app/ for more information
+workflows:
+  android_qa:
+    name: Run tests and build debug apk
+    environment:
+      node: latest
+    cache:
+      cache_paths:
+        - $FCI_BUILD_DIR/node_modules
+    triggering:
+      events:
+        - push
+      branch_patterns:
+        - pattern: '*'
+      cancel_previous_builds: true
+    scripts:
+      - npm install
+      - npm test
+      - cd android && ./gradlew assembleDebug
+    artifacts:
+      - android/app/build/outputs/**/*.apk
